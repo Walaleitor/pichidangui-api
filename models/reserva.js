@@ -1,8 +1,5 @@
 const mongoose = require('mongoose');
 
-
-
-
 let Schema = mongoose.Schema;
 
 let reservaSchema = new Schema({
@@ -24,8 +21,6 @@ let reservaSchema = new Schema({
     final: {
         type: Date,
         required: [true, 'La fecha de fin es necesaria'],
-
-
     },
     estado: {
         type: Boolean,
@@ -34,32 +29,25 @@ let reservaSchema = new Schema({
 });
 
 
+
 reservaSchema.pre('save', function(next) {
     this.model('Reserva').find({ estado: true, cabana: this.cabana }, (err, reservas) => {
-        reservas.forEach(reserva => {
-            if (this.inicio >= reserva.inicio && this.inicio <= reserva.final) {
 
-                const err = {
-                    ok: false,
-                    err: {
-                        message: 'fechas ya ocupadas'
-                    }
+        let fun = (reserva) => {
+            return (this.inicio >= reserva.inicio && this.inicio <= reserva.final) || (this.final >= reserva.inicio && this.final <= reserva.final);
+        };
+
+        if (reservas.some(fun)) {
+            const err = {
+                ok: false,
+                err: {
+                    message: 'fechas ya ocupadas'
                 }
-                next(err);
-
-            } else if (this.final >= reserva.inicio && this.final <= reserva.final) {
-
-                const err = {
-                    ok: false,
-                    err: {
-                        message: 'fechas ya ocupadas'
-                    }
-                }
-                next(err);
-
             }
-        });
-        next()
+            next(err);
+        } else {
+            next();
+        }
     })
 });
 
