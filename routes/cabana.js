@@ -4,10 +4,6 @@ const _ = require('underscore');
 
 const router = express.Router();
 
-router.use(function timeLog(req, res, next) {
-    console.log('Time: ', Date.now());
-    next();
-});
 
 
 router.post('/cabana', (req, res) => {
@@ -41,12 +37,7 @@ router.get('/cabana', (req, res) => {
                 err
             });
         }
-        if (!cabanas) {
-            return res.status(500).json({
-                ok: false,
-                err
-            });
-        }
+
 
         res.json({
             ok: true,
@@ -57,7 +48,43 @@ router.get('/cabana', (req, res) => {
 
 
 router.put('/cabana/:id', (req, res) => {
+    let id = req.params.id;
+    let body = _.pick(req.body, ['descripcion', 'capacidad'])
+    Cabana.findByIdAndUpdate(id, body, { new: true }, (err, cabana) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
 
+        res.json({
+            ok: true,
+            cabana
+        });
+
+
+    })
+})
+
+router.delete('/cabana/:id', (req, res) => {
+    let id = req.params.id;
+    Cabana.findByIdAndUpdate(id, { estado: false }, { new: true }, (err, cabana) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        res.json({
+            ok: true,
+            cabana,
+            menssage: 'La cabaña ha sido borrada'
+        });
+
+
+    })
 })
 
 module.exports = router;

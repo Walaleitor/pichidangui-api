@@ -20,4 +20,4 @@ let cabanaSchema = new Schema({
 });
 
 
-module.exports = mongoose.model('cabana', cabanaSchema);
+module.exports = mongoose.model('Cabana', cabanaSchema);

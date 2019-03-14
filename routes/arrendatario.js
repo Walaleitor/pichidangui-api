@@ -89,7 +89,8 @@ router.delete('/arrendatario/:id', (req, res) => {
 
         res.json({
             ok: true,
-            arrendatario
+            arrendatario,
+            message: 'El arrendatario ha sido borrado'
         })
     });
 });
