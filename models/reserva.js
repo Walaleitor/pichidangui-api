@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { reservaMenorAHoy } = require('../utils/reserva')
 
 let Schema = mongoose.Schema;
 
@@ -31,6 +32,40 @@ let reservaSchema = new Schema({
 
 
 reservaSchema.pre('save', function(next) {
+
+    if (reservaMenorAHoy(this.inicio)) {
+        let err = {
+            ok: false,
+            err: {
+                message: 'La fecha de inicio no puede ser anterior a hoy'
+            }
+        }
+        return next(err);
+    }
+
+    if (this.inicio.getTime() == this.final.getTime()) {
+
+        let err = {
+            ok: false,
+            err: {
+                message: 'La fecha de inicio no puede ser la misma que la de fin'
+            }
+        }
+        return next(err);
+
+    } else if (this.final < this.inicio) {
+
+        let err = {
+            ok: false,
+            err: {
+                message: 'La fecha de fin no puede ser anterior a la de fin'
+            }
+        }
+        return next(err);
+
+    }
+
+
     this.model('Reserva').find({ estado: true, cabana: this.cabana }, (err, reservas) => {
 
         let fun = (reserva) => {
@@ -38,13 +73,13 @@ reservaSchema.pre('save', function(next) {
         };
 
         if (reservas.some(fun)) {
-            const err = {
+            let err = {
                 ok: false,
                 err: {
                     message: 'fechas ya ocupadas'
                 }
             }
-            next(err);
+            return next(err);
         } else {
             next();
         }
