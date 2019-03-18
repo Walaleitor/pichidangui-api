@@ -50,7 +50,7 @@ router.get('/cabana', (req, res) => {
 router.put('/cabana/:id', (req, res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ['descripcion', 'capacidad'])
-    Cabana.findByIdAndUpdate(id, body, { new: true }, (err, cabana) => {
+    Cabana.findByIdAndUpdate(id, body, { new: true , runValidators: true }, (err, cabana) => {
         if (err) {
             return res.status(500).json({
                 ok: false,

@@ -62,7 +62,7 @@ router.get('/arrendatario', (req, res) => {
 router.put('/arrendatario/:id', (req, res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'rut']);
-    Arrendatario.findByIdAndUpdate(id, body, { new: true }, (err, arrendatario) => {
+    Arrendatario.findByIdAndUpdate(id, body, { new: true , runValidators: true }, (err, arrendatario) => {
         if (err) {
             return res.status(500).json({
                 ok: false,

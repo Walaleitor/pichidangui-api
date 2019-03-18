@@ -6,8 +6,6 @@ const _ = require('underscore');
 const router = express.Router();
 
 
-
-
 router.post('/reserva', (req, res) => {
     let body = req.body;
     let cabana = req.query.cabana;
@@ -34,6 +32,42 @@ router.post('/reserva', (req, res) => {
         });
     })
 
+});
+
+router.get('/reserva', (req, res) => {
+    Reserva.find({ estado: true }, (err, reservas) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        res.json({
+            ok: true,
+            reservas
+        })
+
+    })
+
+
+})
+
+router.delete('reserva/:id', (req, res) => {
+    Reserva.findOneAndUpdate({ estado: false }, { new: true }, (err, reserva) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        res.json({
+            ok: true,
+            reserva,
+            menssage: 'La reserva ha sido borrada'
+        });
+    });
 });
 
 

@@ -65,7 +65,6 @@ reservaSchema.pre('save', function(next) {
 
     }
 
-
     this.model('Reserva').find({ estado: true, cabana: this.cabana }, (err, reservas) => {
 
         let fun = (reserva) => {
