@@ -69,7 +69,7 @@ reservaSchema.pre('save', function(next) {
     this.model('Reserva').find({ estado: true, cabana: this.cabana }, (err, reservas) => {
 
         let fun = (reserva) => {
-            return (this.inicio >= reserva.inicio && this.inicio <= reserva.final) || (this.final >= reserva.inicio && this.final <= reserva.final);
+            return (this.inicio > reserva.inicio && this.inicio < reserva.final) || (this.final >= reserva.inicio && this.final <= reserva.final);
         };
 
         if (reservas.some(fun)) {
