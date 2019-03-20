@@ -53,6 +53,25 @@ router.get('/usuario', (req, res) => {
     })
 });
 
+router.delete('/usuario/:id', (req, res) => {
+    let id = req.params.id;
+    Usuario.findByIdAndUpdate(id, { estado: false }, { new: true }, (err, usuarioEliminado) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        res.json({
+            ok: true,
+            usuarios: usuarioEliminado
+        });
+
+    })
+
+})
+
 
 
 
