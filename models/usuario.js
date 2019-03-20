@@ -1,6 +1,7 @@
-mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
-Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 let usuarioSchema = new Schema({
     email: {
