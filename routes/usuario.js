@@ -13,14 +13,14 @@ router.post('/usuario', (req, res) => {
     let usuario = new Usuario({
         email: body.email,
         password: bcrypt.hashSync(body.password, 10),
-    })
+    });
 
     usuario.save((err, usuarioNuevo) => {
         if (err) {
-            return res.sendStatus(400).json({
+            return res.status(400).json({
                 ok: false,
                 err
-            })
+            });
         }
 
         res.json({
@@ -33,6 +33,24 @@ router.post('/usuario', (req, res) => {
 
     })
 
+});
+
+router.get('/usuario', (req, res) => {
+    Usuario.find({ estado: true }, (err, usuarios) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        res.json({
+            ok: true,
+            usuarios: usuarios
+        });
+
+
+    })
 });
 
 
