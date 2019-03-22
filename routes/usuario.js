@@ -1,6 +1,7 @@
 const express = require('express');
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcrypt');
+const { verificaToken } = require('../middlewares/auth')
 
 
 
@@ -35,7 +36,7 @@ router.post('/usuario', (req, res) => {
 
 });
 
-router.get('/usuario', (req, res) => {
+router.get('/usuario', verificaToken, (req, res) => {
     Usuario.find({ estado: true }, (err, usuarios) => {
         if (err) {
             return res.status(500).json({
@@ -53,7 +54,7 @@ router.get('/usuario', (req, res) => {
     })
 });
 
-router.delete('/usuario/:id', (req, res) => {
+router.delete('/usuario/:id', verificaToken, (req, res) => {
     let id = req.params.id;
     Usuario.findByIdAndUpdate(id, { estado: false }, { new: true }, (err, usuarioEliminado) => {
         if (err) {

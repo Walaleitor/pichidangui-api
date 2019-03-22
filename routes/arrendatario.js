@@ -2,6 +2,7 @@ const express = require('express');
 const Arrendatario = require('../models/arrendatario');
 const { format, clean } = require('rut.js');
 const _ = require('underscore');
+const { verificaToken } = require('../middlewares/auth');
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ router.use(function timeLog(req, res, next) {
     next();
 });
 
-router.post('/arrendatario', (req, res) => {
+router.post('/arrendatario', verificaToken, (req, res) => {
     let body = req.body;
     let arrendatario = new Arrendatario({
         nombre: body.nombre,
@@ -35,7 +36,7 @@ router.post('/arrendatario', (req, res) => {
     });
 });
 
-router.get('/arrendatario', (req, res) => {
+router.get('/arrendatario', verificaToken, (req, res) => {
     Arrendatario.find({ estado: true })
         .exec((err, arrendatarios) => {
             if (err) {
@@ -59,7 +60,7 @@ router.get('/arrendatario', (req, res) => {
         });
 });
 
-router.put('/arrendatario/:id', (req, res) => {
+router.put('/arrendatario/:id', verificaToken, (req, res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'rut']);
     Arrendatario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, arrendatario) => {
@@ -77,7 +78,7 @@ router.put('/arrendatario/:id', (req, res) => {
     });
 });
 
-router.delete('/arrendatario/:id', (req, res) => {
+router.delete('/arrendatario/:id', verificaToken, (req, res) => {
     let id = req.params.id;
     Arrendatario.findByIdAndUpdate(id, { estado: false }, { new: true }, (err, arrendatario) => {
         if (err) {
