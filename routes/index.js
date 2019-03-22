@@ -6,6 +6,7 @@ app.use(require('./arrendatario'));
 app.use(require('./cabana'));
 app.use(require('./reserva'));
 app.use(require('./usuario'));
+app.use(require('./login'));
 
 
 module.exports = app;
