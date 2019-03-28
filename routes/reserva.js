@@ -36,20 +36,22 @@ router.post('/reserva', verificaToken, (req, res) => {
 });
 
 router.get('/reserva', verificaToken, (req, res) => {
-    Reserva.find({ estado: true }, (err, reservas) => {
-        if (err) {
-            return res.status(500).json({
-                ok: false,
-                err
-            });
-        }
+    Reserva.find({ estado: true })
+        .populate('cabana', 'descripcion')
+        .exec((err, reservas) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
 
-        res.json({
-            ok: true,
-            reservas
+            res.json({
+                ok: true,
+                reservas
+            })
+
         })
-
-    })
 
 
 })

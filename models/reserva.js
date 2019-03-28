@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { reservaMenorAHoy } = require('../utils/reserva')
+const { reservaMenorAHoy, obtenerNombreMes } = require('../utils/reserva')
 
 let Schema = mongoose.Schema;
 
@@ -84,6 +84,18 @@ reservaSchema.pre('save', function(next) {
         }
     })
 });
+
+reservaSchema.methods.toJSON = function() {
+    let user = this;
+    let userObject = user.toObject();
+    let month = userObject.inicio.getMonth();
+    userObject.mes = obtenerNombreMes(month);
+    userObject.diaInicio = userObject.inicio.getDate();
+    userObject.diaFinal = userObject.final.getDate();
+
+
+    return userObject;
+}
 
 
 

@@ -43,5 +43,4 @@ let arrendatarioSchema = Schema({
 
 arrendatarioSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser unico' });
 
-
 module.exports = mongoose.model('Arrendatario', arrendatarioSchema);
